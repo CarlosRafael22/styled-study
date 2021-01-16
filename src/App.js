@@ -1,6 +1,7 @@
 import './App.css';
 import Diva from './components/Diva';
 import Pipa from './components/Pipa';
+import Pipo from './components/Pipo';
 
 function App() {
   return (
@@ -10,6 +11,12 @@ function App() {
          <Pipa color="white" bgColor="black">
            qerqwrwqerweq
          </Pipa>
+         <Pipa color="white" bgColor="green">
+           qerqwrwqerweq
+         </Pipa>
+         <Pipo color="blue" bgColor="yellow">
+           Pipo
+         </Pipo>
        </Diva>
     </div>
   );
