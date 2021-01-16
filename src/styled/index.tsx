@@ -1,22 +1,36 @@
 import React from "react";
 
-type InterpolationFunction = (props: Object) => string | undefined
+type InterpolationFunction = (props: Object) => string | undefined | Object
 type StyledProps = Array<string | InterpolationFunction> | TemplateStringsArray | InterpolationFunction
+
+const isFunctionTemplate = (args: Array<StyledProps>) => {
+  const hasOnlyStringArrayAndAExpression = args.length === 2
+  const stringArrayHasOnlySpaceOrLineBreak = args[0].length <= 2
+  const expressionIsAFunctionWithProps = typeof args[1] === 'function'
+  return hasOnlyStringArrayAndAExpression && stringArrayHasOnlySpaceOrLineBreak && expressionIsAFunctionWithProps
+}
 
 const createStyledForTag = (tag: string) => {
     const newStyleDiv = (...args: Array<StyledProps>) => (props: any) => {
         console.log("PROPS DO newStyleDiv: ", props, args);
         const [stylesArray, ...expressions] = args as [stylesArray: Array<string>, expressions: Array<InterpolationFunction>];
         console.log("SPREADED: ", stylesArray, expressions);
-      
-        const interpolatedString = stylesArray.reduce((previous, current, i) => {
+
+        let style
+        if (isFunctionTemplate(args)) {
+          const styledFunction = args[1] as InterpolationFunction
+          style = styledFunction(props)
+        } else {
+          const interpolatedString = stylesArray.reduce((previous, current, i) => {
             // @ts-ignore
             return `${previous}${current}${expressions[i] ? `"${expressions[i](props)}"` : ""}`;
-        }, "");
-      
-        console.log("interpolatedString: ", interpolatedString);
-        const toBeParsedString = `{${interpolatedString}}`;
-        const style = JSON.parse(toBeParsedString);
+          }, "");
+        
+          console.log("interpolatedString: ", interpolatedString);
+          const toBeParsedString = `{${interpolatedString}}`;
+          style = JSON.parse(toBeParsedString);
+        }
+
         console.log("style: ", style);
         return React.createElement(
           tag,
@@ -38,17 +52,3 @@ const htmlStyled = {
 };
 
 export default htmlStyled;
-
-// const getArgs = (...args) => [...args];
-// const getArgsFromProps = (props, ...args) => [...args];
-
-// const result = getArgs`
-//     borderRadius: '4rem',
-//     width: ${(props) => props.width},
-//     height: ${(props) => props.height},
-//     backgroundColor: ${(props) =>
-//       props.color
-//         ? props.color
-//         : { alert: "red", pass: "green", info: "orange" }[props.status]}
-// `;
-// console.log(result);
