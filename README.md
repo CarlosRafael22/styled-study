@@ -1,13 +1,14 @@
 # Styled-Study
 
-The purpouse of this project is to understand more about Tagged Template Literals. I try to mock how styled-components work using this ES6 feature.
+The purpouse of this project is to understand more about `Tagged Template Literals`. I try to mock how styled-components work using this ES6 feature.
 
 For that /styled/index exports the styled object which only deals with div and p tags so far. Its use is sort of the same way as the styled from styled-components, however it only deals with simple css properties.
 
 ## Use
 
-There are two styled <p> tags that shows how to use the styled object, the Pipa and Pipo components.
+There are two styled `<p> tags` that shows how to use the styled object, the Pipa and Pipo components.
 
+```javascript
 const Pipa = styled.p`
     "borderRadius": "4rem",
     "padding": "1rem",
@@ -23,6 +24,7 @@ ${(props: PipaProps) => ({
     "color":props.color
 })}
 `;
+```
 
 These are the only two ways to create a styled component here. Once you create these components you can pass props to them just like styled-components:
 
